@@ -10,6 +10,9 @@ customStyles: "[[STYLES]]"
 # Hide the sync button
 hideSyncButton: false
 
+# Show Markdown preview on the right hand side
+previewOnRHS: true
+
 # Configure the shown action buttons (top right bar)
 actionButtons:
 - icon: home # Use any icon from https://feathericons.com

@@ -2,6 +2,7 @@ import { asset, clientStore, editor, markdown, system } from "$sb/syscalls.ts";
 import { renderMarkdownToHtml } from "./markdown_render.ts";
 import { resolveAttachmentPath } from "$sb/lib/resolve.ts";
 import { expandCodeWidgets } from "./api.ts";
+import { readSettings } from "$sb/lib/settings_page.ts";
 
 export async function updateMarkdownPreview() {
   if (!(await clientStore.get("enableMarkdownPreview"))) {
@@ -25,8 +26,9 @@ export async function updateMarkdownPreview() {
       return url;
     },
   });
+  const setting = await readSettings({ previewOnRHS: true });
   await editor.showPanel(
-    "rhs",
+    setting.previewOnRHS ? "rhs" : "lhs",
     2,
     `<html><head><style>${css}</style></head><body><div id="root">${html}</div></body></html>`,
     js,
