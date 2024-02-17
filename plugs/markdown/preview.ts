@@ -1,4 +1,11 @@
-import { asset, clientStore, editor, markdown, system } from "$sb/syscalls.ts";
+import {
+  asset,
+  clientStore,
+  editor,
+  markdown,
+  space,
+  system,
+} from "$sb/syscalls.ts";
 import { renderMarkdownToHtml } from "./markdown_render.ts";
 import { resolveAttachmentPath } from "$sb/lib/resolve.ts";
 import { expandCodeWidgets } from "./api.ts";
@@ -8,8 +15,13 @@ export async function updateMarkdownPreview() {
   if (!(await clientStore.get("enableMarkdownPreview"))) {
     return;
   }
-  const currentPage = await editor.getCurrentPage();
-  const text = await editor.getText();
+  const setting = await readSettings({ previewOnRHS: true, sidePage: "" });
+  const currentPage = setting.sidePage
+    ? setting.sidePage
+    : await editor.getCurrentPage();
+  const text = setting.sidePage
+    ? await space.readPage(currentPage)
+    : await editor.getText();
   const mdTree = await markdown.parseMarkdown(text);
   // const cleanMd = await cleanMarkdown(text);
   const css = await asset.readAsset("markdown", "assets/preview.css");
@@ -26,7 +38,6 @@ export async function updateMarkdownPreview() {
       return url;
     },
   });
-  const setting = await readSettings({ previewOnRHS: true });
   await editor.showPanel(
     setting.previewOnRHS ? "rhs" : "lhs",
     2,
