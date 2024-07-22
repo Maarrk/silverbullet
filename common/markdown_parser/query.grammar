@@ -125,11 +125,11 @@ Bool {
 
   LineComment { "#" ![\n]* }
 
-  TagIdentifier { @asciiLetter (@asciiLetter | @digit | "-" | "_" | "/" )* }
+  TagIdentifier { $[a-zA-Z\u{a1}-\u{24f}] ($[a-zA-Z\u{a1}-\u{24f}] | @digit | "-" | "_" | "/" )* }
 
-  Identifier { @asciiLetter (@asciiLetter | @digit | "-" | "_")* |  "`" ![`]* "`" }
+  Identifier { $[a-zA-Z\u{a1}-\u{24f}] ($[a-zA-Z\u{a1}-\u{24f}] | @digit | "-" | "_")* |  "`" ![`]* "`" }
 
-  GlobalIdentifier { "@" @asciiLetter (@asciiLetter | @digit | "-" | "_")* }
+  GlobalIdentifier { "@" $[a-zA-Z\u{a1}-\u{24f}] ($[a-zA-Z\u{a1}-\u{24f}] | @digit | "-" | "_")* }
 
   String {
       "\"" ![\"]* "\""
