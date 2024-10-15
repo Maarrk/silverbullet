@@ -63,13 +63,6 @@ async function updateConfig() {
       continue;
     }
     const emoji: string = aliasMap[alias].trim();
-    // For detecting misconfiguration like 'smile: grinning_face' which wouldn't work.
-    // Side effect: can't use for phrases like 'br: Best regards', but Slash Commands are meant for that
-    if ([...emoji].find((c) => c.charCodeAt(0) <= 127)) {
-      // ASCII characters somewhere in text
-      badAliases.push(alias);
-      continue;
-    }
 
     aliases.push([alias, emoji]);
   }

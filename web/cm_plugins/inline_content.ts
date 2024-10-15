@@ -20,6 +20,7 @@ import { mime } from "mimetypes";
 type ContentDimensions = {
   width?: number;
   height?: number;
+  inline?: boolean;
 };
 
 class InlineContentWidget extends WidgetType {
@@ -47,7 +48,7 @@ class InlineContentWidget extends WidgetType {
   toDOM() {
     const div = document.createElement("div");
     div.className = "sb-inline-content";
-    div.style.display = "block";
+    div.style.display = this.dim?.inline === true ? "inline" : "block";
     const mimeType = mime.getType(
       this.url.substring(this.url.lastIndexOf(".") + 1),
     );
@@ -108,7 +109,11 @@ class InlineContentWidget extends WidgetType {
     el.style.maxWidth = "100%";
 
     if (this.dim) {
-      if (this.dim.height) {
+      if (this.dim.inline === true) {
+        el.style.height = "1.1em";
+        el.style.display = "inline";
+        el.style.verticalAlign = "middle";
+      } else if (this.dim.height) {
         el.style.height = `${this.dim.height}px`;
       }
       if (this.dim.width) {
@@ -138,6 +143,9 @@ function parseAlias(
     if (height) {
       dim.height = parseInt(height);
     }
+    if (dimPart === "inline") {
+      dim.inline = true;
+    }
   } else if (/^[x\d]/.test(text)) {
     const [width, height] = text.split("x");
     dim = {};
@@ -147,6 +155,8 @@ function parseAlias(
     if (height) {
       dim.height = parseInt(height);
     }
+  } else if (text === "inline") {
+    dim = { inline: true };
   } else {
     alias = text;
   }
@@ -245,7 +255,7 @@ export function inlineContentPlugin(client: Client) {
               dim,
               client,
             ),
-            block: true,
+            block: false,
           }).range(node.to),
         );
 
