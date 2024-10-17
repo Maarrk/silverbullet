@@ -25,9 +25,28 @@ config:
         required:
           - command
       nullable: true
-    useSmartQuotes:
+    useSmartQuotes: # deprecated
       type: boolean
       nullable: true
+    smartQuotes:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        double:
+          type: object
+          properties:
+            left:
+              type: string
+            right:
+              type: string
+        single:
+          type: object
+          properties:
+            left:
+              type: string
+            right:
+              type: string
     pwaOpenLastPage:
       type: boolean
       nullable: true
